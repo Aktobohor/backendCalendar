@@ -1,9 +1,9 @@
 package com.example.calendar.services;
 
-import com.example.calendar.DTOs.StructurMapper;
+import com.example.calendar.DTOs.StructureMapper;
 import com.example.calendar.DTOs.StructureDto;
 import com.example.calendar.entities.StructureRepository;
-import com.example.calendar.entities.Structures;
+import com.example.calendar.entities.Structure;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.stereotype.Service;
 
@@ -11,35 +11,35 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class StructuresService {
+public class StructureService {
 
 
     private StructureRepository structureRepository;
 
-    private StructurMapper structurMapper;
+    private StructureMapper structureMapper;
 
-    public StructuresService(StructurMapper structurMapper, StructureRepository structureRepository) {
+    public StructureService(StructureMapper structureMapper, StructureRepository structureRepository) {
 
-        this.structurMapper = structurMapper;
+        this.structureMapper = structureMapper;
         this.structureRepository = structureRepository;
     }
 
     public List<StructureDto> findAll() {
-        Iterable<Structures> all = this.structureRepository.findAll();
-        List<Structures> results = IterableUtils.toList(all);
+        Iterable<Structure> all = this.structureRepository.findAll();
+        List<Structure> results = IterableUtils.toList(all);
         System.out.println("aaaaaal:" + all);
 
-        Structures structures = new Structures(1, 1, 1, 1);
+        Structure structures = new Structure(1, 1, 1, 1);
 
         //ritorna una sola structure
         //return  structurMapper.toDto(structures);
 
-        return results.stream().map(result -> structurMapper.toDto(result)).collect(Collectors.toList());
+        return results.stream().map(result -> structureMapper.toDto(result)).collect(Collectors.toList());
 
 
     }
 
-    public void save(Structures s) {
+    public void save(Structure s) {
         this.structureRepository.save(s);
     }
 }

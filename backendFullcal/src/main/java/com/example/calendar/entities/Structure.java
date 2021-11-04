@@ -3,7 +3,7 @@ package com.example.calendar.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
-public class Structures {
+public class Structure {
 
     private @Id int id;
     @Column("idQuestionary")
@@ -16,7 +16,7 @@ public class Structures {
     private int idRandomTask;
 
 
-    public Structures(int idQuestionary, int idTask,int idChallenges, int idRandomTask){
+    public Structure(int idQuestionary, int idTask, int idChallenges, int idRandomTask){
         this.idQuestionary = idQuestionary;
         this.idTask = idTask;
         this.idChallenges = idChallenges;

@@ -1,8 +1,8 @@
 package com.example.calendar;
 
 import com.example.calendar.DTOs.StructureDto;
-import com.example.calendar.entities.Structures;
-import com.example.calendar.services.StructuresService;
+import com.example.calendar.entities.Structure;
+import com.example.calendar.services.StructureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CalController {
 
     @Autowired
-    private StructuresService structuresService;
+    private StructureService structureService;
 
     /*CalController(StructuresService structuresService){
 
@@ -40,10 +40,10 @@ public class CalController {
         System.out.println("prova "+a+"\ntitle:" +title+"\nfreq:" +freq+"\ninterval:" +interval
                 +"\nbyweekday:" +byweekday+"\ndtstart:" +dtstart+"\nuntil:" +until);
 
-        Structures s = new Structures(3,4,5,65);
-        this.structuresService.save(s);
+        Structure s = new Structure(3,4,5,65);
+        this.structureService.save(s);
 
-        List<StructureDto> all = this.structuresService.findAll();
+        List<StructureDto> all = this.structureService.findAll();
         System.out.println("alalal");
 
         return all;
