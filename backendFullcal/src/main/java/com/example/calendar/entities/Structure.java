@@ -5,6 +5,7 @@ import org.springframework.data.relational.core.mapping.Column;
 
 public class Structure {
 
+    @Column("id")
     private @Id int id;
     @Column("idQuestionary")
     private int idQuestionary;
