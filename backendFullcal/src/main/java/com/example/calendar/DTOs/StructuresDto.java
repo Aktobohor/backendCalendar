@@ -1,6 +1,6 @@
 package com.example.calendar.DTOs;
 
-public class StructureDto {
+public class StructuresDto {
     private int id;
     private int idQuestionary;
     private int idTask;

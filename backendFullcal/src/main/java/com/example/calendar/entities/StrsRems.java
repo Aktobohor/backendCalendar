@@ -67,7 +67,7 @@ public class StrsRems {
 
     @Override
     public String toString() {
-        return "Reminders{" +
+        return "StrsRems{" +
                 "id=" + id +
                 ", id_structure=" + id_structure +
                 ", id_reminder=" + id_reminder +

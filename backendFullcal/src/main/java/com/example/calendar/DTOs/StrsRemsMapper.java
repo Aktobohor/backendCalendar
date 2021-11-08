@@ -6,5 +6,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface StrsRemsMapper {
 
-    StrsRemsDto toDto(StrsRems str_rem);
+    StrsRemsDto toDto(StrsRems strs_rems);
 }

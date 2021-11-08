@@ -5,12 +5,14 @@ import org.springframework.data.relational.core.mapping.Column;
 
 import java.sql.Date;
 
-public class Reminder {
+public class Reminders {
 
     @Column("id")
     private @Id int id;
+    @Column("r_title")
+    private  String r_title;
     @Column("r_freq")
-    private  int r_freq;
+    private  String r_freq;
     @Column("r_dt_start")
     private Date r_dt_start;
     @Column("r_interval")
@@ -40,10 +42,10 @@ public class Reminder {
     @Column("r_byseconds")
     private  String r_byseconds;
 
-    public Reminder(int r_freq, Date r_dt_start, double r_interval, int r_wkst, int r_count,
-                    Date r_until, String r_tzid, String r_bysetpos, String r_bymonth,
-                    String r_byyearday, String r_byweekno, String r_byweekday, String r_byhour,
-                    String r_byminute, String r_byseconds){
+    public Reminders(String r_title, String r_freq, Date r_dt_start, double r_interval, int r_wkst, int r_count,
+                     Date r_until, String r_tzid, String r_bysetpos, String r_bymonth,
+                     String r_byyearday, String r_byweekno, String r_byweekday, String r_byhour, String r_byminute, String r_byseconds){
+        this.r_title = r_title;
         this.r_freq = r_freq;
         this.r_dt_start = r_dt_start;
         this.r_interval = r_interval;
@@ -69,11 +71,11 @@ public class Reminder {
         this.id = id;
     }
 
-    public int getR_freq() {
+    public String getR_freq() {
         return r_freq;
     }
 
-    public void setR_freq(int r_freq) {
+    public void setR_freq(String r_freq) {
         this.r_freq = r_freq;
     }
 
@@ -189,10 +191,18 @@ public class Reminder {
         this.r_byseconds = r_byseconds;
     }
 
+    public String getR_title() {
+        return r_title;
+    }
+
+    public void setR_title(String r_title) {
+        this.r_title = r_title;
+    }
     @Override
     public String toString() {
         return "Reminders{" +
                 "id=" + id +
+                ", r_title=" + r_title +
                 ", r_freq=" + r_freq +
                 ", r_dt_start=" + r_dt_start +
                 ", r_interval=" + r_interval +

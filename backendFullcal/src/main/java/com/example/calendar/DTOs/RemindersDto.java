@@ -1,12 +1,16 @@
 package com.example.calendar.DTOs;
 
 import java.sql.Date;
+import java.sql.Time;
 
-public class ReminderDto {
+public class RemindersDto {
 
     private int id;
-    private  int r_freq;
+    private  String r_title;
+    private  String r_freq;
     private Date r_dt_start;
+    private Time r_time_start;
+    private Time r_time_end;
     private double r_interval;
     private  int r_wkst;
     private  int r_count;
@@ -29,11 +33,11 @@ public class ReminderDto {
         this.id = id;
     }
 
-    public int getR_freq() {
+    public String getR_freq() {
         return r_freq;
     }
 
-    public void setR_freq(int r_freq) {
+    public void setR_freq(String r_freq) {
         this.r_freq = r_freq;
     }
 
@@ -147,5 +151,29 @@ public class ReminderDto {
 
     public void setR_byseconds(String r_byseconds) {
         this.r_byseconds = r_byseconds;
+    }
+
+    public String getR_title() {
+        return r_title;
+    }
+
+    public void setR_title(String r_title) {
+        this.r_title = r_title;
+    }
+
+    public Time getR_time_start() {
+        return r_time_start;
+    }
+
+    public void setR_time_start(Time r_time_start) {
+        this.r_time_start = r_time_start;
+    }
+
+    public Time getR_time_end() {
+        return r_time_end;
+    }
+
+    public void setR_time_end(Time r_time_end) {
+        this.r_time_end = r_time_end;
     }
 }

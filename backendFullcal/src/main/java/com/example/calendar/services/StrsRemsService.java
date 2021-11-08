@@ -5,10 +5,12 @@ import com.example.calendar.DTOs.StrsRemsMapper;
 import com.example.calendar.entities.StrsRems;
 import com.example.calendar.entities.StrsRemsRepository;
 import org.apache.commons.collections4.IterableUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class StrsRemsService {
 
     private StrsRemsRepository strs_remsRepository;
