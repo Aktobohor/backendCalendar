@@ -5,7 +5,7 @@ import java.sql.Date;
 public class StrsRemsDto {
 
     private int id;
-    private  int id_structure;
+    private int id_structure;
     private int id_reminder;
     private String creator;
     private Date timestamp;

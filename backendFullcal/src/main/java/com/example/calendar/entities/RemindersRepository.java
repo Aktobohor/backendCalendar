@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 public interface RemindersRepository extends CrudRepository<Reminders, Integer> {
 
 
-
 }

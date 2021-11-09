@@ -1,9 +1,9 @@
 package com.example.calendar.services;
 
+import com.example.calendar.DTOs.StructureDto;
 import com.example.calendar.DTOs.StructuresMapper;
-import com.example.calendar.DTOs.StructuresDto;
-import com.example.calendar.entities.StructuresRepository;
 import com.example.calendar.entities.Structures;
+import com.example.calendar.entities.StructuresRepository;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class StructuresService {
         this.structuresRepository = structuresRepository;
     }
 
-    public List<StructuresDto> findAll() {
+    public List<StructureDto> findAll() {
         Iterable<Structures> all = this.structuresRepository.findAll();
         List<Structures> results = IterableUtils.toList(all);
         System.out.println("aaaaaal:" + all);

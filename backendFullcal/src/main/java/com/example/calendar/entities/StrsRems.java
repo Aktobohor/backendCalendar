@@ -8,17 +8,18 @@ import java.sql.Date;
 public class StrsRems {
 
     @Column("id")
-    private @Id int id;
+    private @Id
+    int id;
     @Column("id_structure")
-    private  int id_structure;
+    private int id_structure;
     @Column("id_reminder")
     private int id_reminder;
     @Column("creator")
     private String creator;
     @Column("timestamp")
-    private  Date timestamp;
+    private Date timestamp;
 
-    public StrsRems(int id_structure, int id_reminder, String creator, Date timestamp){
+    public StrsRems(int id_structure, int id_reminder, String creator, Date timestamp) {
         this.id_structure = id_structure;
         this.id_reminder = id_reminder;
         this.creator = creator;

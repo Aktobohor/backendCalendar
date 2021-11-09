@@ -6,7 +6,8 @@ import org.springframework.data.relational.core.mapping.Column;
 public class Structures {
 
     @Column("id")
-    private @Id int id;
+    private @Id
+    int id;
     @Column("idQuestionary")
     private int idQuestionary;
     @Column("idTask")
@@ -17,7 +18,7 @@ public class Structures {
     private int idRandomTask;
 
 
-    public Structures(int idQuestionary, int idTask, int idChallenges, int idRandomTask){
+    public Structures(int idQuestionary, int idTask, int idChallenges, int idRandomTask) {
         this.idQuestionary = idQuestionary;
         this.idTask = idTask;
         this.idChallenges = idChallenges;

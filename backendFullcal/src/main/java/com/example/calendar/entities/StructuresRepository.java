@@ -4,8 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StructuresRepository extends CrudRepository <Structures, Integer>{
-
+public interface StructuresRepository extends CrudRepository<Structures, Integer> {
 
 
 }

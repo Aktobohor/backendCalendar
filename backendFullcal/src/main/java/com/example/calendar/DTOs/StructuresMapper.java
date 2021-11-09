@@ -6,7 +6,9 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface StructuresMapper {
 
-    StructuresDto toDto(Structures structures);
+    StructureDto toDto(Structures structures);
+
+    Structures toEntity(StructureDto structure);
 
 
 }

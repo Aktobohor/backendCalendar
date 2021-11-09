@@ -1,29 +1,26 @@
 package com.example.calendar.DTOs;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
-public class RemindersDto {
+public class ReminderDto {
 
     private int id;
-    private  String r_title;
-    private  String r_freq;
-    private Date r_dt_start;
-    private Time r_time_start;
-    private Time r_time_end;
+    private String r_title;
+    private String r_freq;
+    private LocalDateTime r_dt_start;
     private double r_interval;
-    private  int r_wkst;
-    private  int r_count;
-    private Date r_until;
-    private  String r_tzid;
-    private  String r_bysetpos;
-    private  String r_bymonth;
-    private  String r_byyearday;
-    private  String r_byweekno;
-    private  String r_byweekday;
-    private  String r_byhour;
-    private  String r_byminute;
-    private  String r_byseconds;
+    private int r_wkst;
+    private int r_count;
+    private LocalDateTime r_until;
+    private String r_tzid;
+    private String r_bysetpos;
+    private String r_bymonth;
+    private String r_byyearday;
+    private String r_byweekno;
+    private String r_byweekday;
+    private String r_byhour;
+    private String r_byminute;
+    private String r_byseconds;
 
     public int getId() {
         return id;
@@ -41,11 +38,11 @@ public class RemindersDto {
         this.r_freq = r_freq;
     }
 
-    public Date getR_dt_start() {
+    public LocalDateTime getR_dt_start() {
         return r_dt_start;
     }
 
-    public void setR_dt_start(Date r_dt_start) {
+    public void setR_dt_start(LocalDateTime r_dt_start) {
         this.r_dt_start = r_dt_start;
     }
 
@@ -73,11 +70,11 @@ public class RemindersDto {
         this.r_count = r_count;
     }
 
-    public Date getR_until() {
+    public LocalDateTime getR_until() {
         return r_until;
     }
 
-    public void setR_until(Date r_until) {
+    public void setR_until(LocalDateTime r_until) {
         this.r_until = r_until;
     }
 
@@ -161,19 +158,4 @@ public class RemindersDto {
         this.r_title = r_title;
     }
 
-    public Time getR_time_start() {
-        return r_time_start;
-    }
-
-    public void setR_time_start(Time r_time_start) {
-        this.r_time_start = r_time_start;
-    }
-
-    public Time getR_time_end() {
-        return r_time_end;
-    }
-
-    public void setR_time_end(Time r_time_end) {
-        this.r_time_end = r_time_end;
-    }
 }

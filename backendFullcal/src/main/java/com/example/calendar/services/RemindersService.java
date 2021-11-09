@@ -1,9 +1,10 @@
 package com.example.calendar.services;
 
-import com.example.calendar.DTOs.RemindersDto;
-import com.example.calendar.DTOs.RemindersMapper;
+import com.example.calendar.DTOs.*;
 import com.example.calendar.entities.Reminders;
 import com.example.calendar.entities.RemindersRepository;
+import com.example.calendar.entities.Structures;
+import com.example.calendar.entities.StructuresRepository;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.stereotype.Service;
 
@@ -14,30 +15,46 @@ import java.util.stream.Collectors;
 public class RemindersService {
 
     private RemindersRepository remindersRepository;
+    private StructuresRepository structuresRepository;
 
     private RemindersMapper remindersMapper;
 
-    public RemindersService(RemindersMapper remindersMapper, RemindersRepository remindersRepository) {
+    private StructuresMapper structuresMapper;
+
+    public RemindersService(RemindersMapper remindersMapper, StructuresMapper structuresMapper, RemindersRepository remindersRepository, StructuresRepository structuresRepository) {
 
         this.remindersMapper = remindersMapper;
+        this.structuresMapper = structuresMapper;
         this.remindersRepository = remindersRepository;
+        this.structuresRepository = structuresRepository;
     }
 
-    public List<RemindersDto> findAll() {
+    public List<ReminderDto> findAll() {
         Iterable<Reminders> all = this.remindersRepository.findAll();
         List<Reminders> results = IterableUtils.toList(all);
         System.out.println("Reminders:" + all);
-
-        //ritorna una sola structure
-        //return  structurMapper.toDto(structures);
 
         return results.stream().map(result -> remindersMapper.toDto(result)).collect(Collectors.toList());
 
 
     }
 
-    public void save(Reminders r) {
-        this.remindersRepository.save(r);
+    public NewReminderDTO save(NewReminderDTO newReminderDTO) {
+
+        Structures structure = this.structuresMapper.toEntity(newReminderDTO.getStructureDto());
+        Reminders reminder = this.remindersMapper.toEntity(newReminderDTO.getReminderDto());
+
+
+        Structures savedStructure = this.structuresRepository.save(structure);
+        Reminders savedReminder = this.remindersRepository.save(reminder);
+
+        StructureDto savedStructureDto = this.structuresMapper.toDto(savedStructure);
+        ReminderDto savedReminderDto = this.remindersMapper.toDto(savedReminder);
+
+        newReminderDTO.setReminderDto(savedReminderDto);
+        newReminderDTO.setStructureDto(savedStructureDto);
+        return newReminderDTO;
+
     }
 
 

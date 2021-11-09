@@ -3,48 +3,49 @@ package com.example.calendar.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Reminders {
 
     @Column("id")
-    private @Id int id;
+    private @Id
+    int id;
     @Column("r_title")
-    private  String r_title;
+    private String r_title;
     @Column("r_freq")
-    private  String r_freq;
+    private String r_freq;
     @Column("r_dt_start")
-    private Date r_dt_start;
+    private LocalDateTime r_dt_start;
     @Column("r_interval")
     private double r_interval;
     @Column("r_wkst")
-    private  int r_wkst;
+    private int r_wkst;
     @Column("r_count")
-    private  int r_count;
+    private int r_count;
     @Column("r_until")
-    private Date r_until;
+    private LocalDateTime r_until;
     @Column("r_tzid")
-    private  String r_tzid;
+    private String r_tzid;
     @Column("r_bysetpos")
-    private  String r_bysetpos;
+    private String r_bysetpos;
     @Column("r_bymonth")
-    private  String r_bymonth;
+    private String r_bymonth;
     @Column("r_byyearday")
-    private  String r_byyearday;
+    private String r_byyearday;
     @Column("r_byweekno")
-    private  String r_byweekno;
+    private String r_byweekno;
     @Column("r_byweekday")
-    private  String r_byweekday;
+    private String r_byweekday;
     @Column("r_byhour")
-    private  String r_byhour;
+    private String r_byhour;
     @Column("r_byminute")
-    private  String r_byminute;
+    private String r_byminute;
     @Column("r_byseconds")
-    private  String r_byseconds;
+    private String r_byseconds;
 
-    public Reminders(String r_title, String r_freq, Date r_dt_start, double r_interval, int r_wkst, int r_count,
-                     Date r_until, String r_tzid, String r_bysetpos, String r_bymonth,
-                     String r_byyearday, String r_byweekno, String r_byweekday, String r_byhour, String r_byminute, String r_byseconds){
+    public Reminders(String r_title, String r_freq, LocalDateTime r_dt_start, double r_interval, int r_wkst, int r_count,
+                     LocalDateTime r_until, String r_tzid, String r_bysetpos, String r_bymonth,
+                     String r_byyearday, String r_byweekno, String r_byweekday, String r_byhour, String r_byminute, String r_byseconds) {
         this.r_title = r_title;
         this.r_freq = r_freq;
         this.r_dt_start = r_dt_start;
@@ -79,11 +80,11 @@ public class Reminders {
         this.r_freq = r_freq;
     }
 
-    public Date getR_dt_start() {
+    public LocalDateTime getR_dt_start() {
         return r_dt_start;
     }
 
-    public void setR_dt_start(Date r_dt_start) {
+    public void setR_dt_start(LocalDateTime r_dt_start) {
         this.r_dt_start = r_dt_start;
     }
 
@@ -111,11 +112,11 @@ public class Reminders {
         this.r_count = r_count;
     }
 
-    public Date getR_until() {
+    public LocalDateTime getR_until() {
         return r_until;
     }
 
-    public void setR_until(Date r_until) {
+    public void setR_until(LocalDateTime r_until) {
         this.r_until = r_until;
     }
 
@@ -198,6 +199,7 @@ public class Reminders {
     public void setR_title(String r_title) {
         this.r_title = r_title;
     }
+
     @Override
     public String toString() {
         return "Reminders{" +
