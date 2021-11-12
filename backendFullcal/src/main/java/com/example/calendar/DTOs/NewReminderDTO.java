@@ -3,6 +3,7 @@ package com.example.calendar.DTOs;
 public class NewReminderDTO {
     ReminderDto reminderDto;
     StructureDto structureDto;
+    StrsRemsDto strsRemsDto;
 
     public ReminderDto getReminderDto() {
         return reminderDto;
@@ -18,5 +19,13 @@ public class NewReminderDTO {
 
     public void setStructureDto(StructureDto structureDto) {
         this.structureDto = structureDto;
+    }
+
+    public StrsRemsDto getStrsRemsDto() {
+        return strsRemsDto;
+    }
+
+    public void setStrsRemsDto(StrsRemsDto strsRemsDto) {
+        this.strsRemsDto = strsRemsDto;
     }
 }

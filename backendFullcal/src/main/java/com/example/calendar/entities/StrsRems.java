@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 public class StrsRems {
 
@@ -19,11 +20,11 @@ public class StrsRems {
     @Column("timestamp")
     private Date timestamp;
 
-    public StrsRems(int id_structure, int id_reminder, String creator, Date timestamp) {
+    public StrsRems(int id_structure, int id_reminder, String creator) {
         this.id_structure = id_structure;
         this.id_reminder = id_reminder;
         this.creator = creator;
-        this.timestamp = timestamp;
+        this.timestamp = new Date(Calendar.getInstance().getTime().getTime());
     }
 
     public int getId() {

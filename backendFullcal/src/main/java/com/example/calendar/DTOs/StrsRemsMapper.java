@@ -7,4 +7,6 @@ import org.mapstruct.Mapper;
 public interface StrsRemsMapper {
 
     StrsRemsDto toDto(StrsRems strs_rems);
+
+    StrsRems toEntity(StrsRemsDto strs_rems);
 }
