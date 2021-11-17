@@ -62,10 +62,13 @@ public class RemindersService {
     public NewReminderDTO save(NewReminderDTO newReminderDTO) {
         Structures structure = this.structuresMapper.toEntity(newReminderDTO.getStructureDto());
         Reminders reminder = this.remindersMapper.toEntity(newReminderDTO.getReminderDto());
-        StrsRems strsRems = this.strsRemsMapper.toEntity(newReminderDTO.getStrsRemsDto());
+       // StrsRems strsRems = this.strsRemsMapper.toEntity(newReminderDTO.getStrsRemsDto());
 
         Structures savedStructure = this.structuresRepository.save(structure);
         Reminders savedReminder = this.remindersRepository.save(reminder);
+
+        StrsRems strsRems = new StrsRems(savedStructure.getId(), savedReminder.getId(), "");
+
         StrsRems savedStrsRems = this.strsRemsRepository.save(strsRems);
 
         StructureDto savedStructureDto = this.structuresMapper.toDto(savedStructure);

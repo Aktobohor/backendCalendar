@@ -17,7 +17,7 @@ public class Reminders {
     @Column("r_dt_start")
     private LocalDateTime r_dt_start;
     @Column("r_interval")
-    private double r_interval;
+    private int r_interval;
     @Column("r_wkst")
     private int r_wkst;
     @Column("r_count")
@@ -43,7 +43,7 @@ public class Reminders {
     @Column("r_byseconds")
     private String r_byseconds;
 
-    public Reminders(String r_title, String r_freq, LocalDateTime r_dt_start, double r_interval, int r_wkst, int r_count,
+    public Reminders(String r_title, String r_freq, LocalDateTime r_dt_start, int r_interval, int r_wkst, int r_count,
                      LocalDateTime r_until, String r_tzid, String r_bysetpos, String r_bymonth,
                      String r_byyearday, String r_byweekno, String r_byweekday, String r_byhour, String r_byminute, String r_byseconds) {
         this.r_title = r_title;
@@ -88,11 +88,11 @@ public class Reminders {
         this.r_dt_start = r_dt_start;
     }
 
-    public double getR_interval() {
+    public int getR_interval() {
         return r_interval;
     }
 
-    public void setR_interval(double r_interval) {
+    public void setR_interval(int r_interval) {
         this.r_interval = r_interval;
     }
 

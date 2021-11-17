@@ -8,7 +8,7 @@ public class ReminderDto {
     private String r_title;
     private String r_freq;
     private LocalDateTime r_dt_start;
-    private double r_interval;
+    private int r_interval;
     private int r_wkst;
     private int r_count;
     private LocalDateTime r_until;
@@ -46,11 +46,11 @@ public class ReminderDto {
         this.r_dt_start = r_dt_start;
     }
 
-    public double getR_interval() {
+    public int getR_interval() {
         return r_interval;
     }
 
-    public void setR_interval(double r_interval) {
+    public void setR_interval(int r_interval) {
         this.r_interval = r_interval;
     }
 

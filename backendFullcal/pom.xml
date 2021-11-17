@@ -76,6 +76,16 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.mnode.ical4j</groupId>
+			<artifactId>ical4j</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-saddle</groupId>
+			<artifactId>google-rfc-2445</artifactId>
+			<version>20110304</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

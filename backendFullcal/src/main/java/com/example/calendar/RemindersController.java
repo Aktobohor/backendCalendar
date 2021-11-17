@@ -49,7 +49,10 @@ public class RemindersController {
     @PostMapping("/create")
     public NewReminderDTO createReminder(@RequestBody final NewReminderDTO newReminder) {
         System.out.println("body: " + newReminder.getReminderDto());
+
         return this.remindersService.save(newReminder);
     }
+
+
 
 }
