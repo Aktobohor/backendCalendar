@@ -60,23 +60,25 @@ public class RemindersService {
     }
 
     public NewReminderDTO save(NewReminderDTO newReminderDTO) {
-        Structures structure = this.structuresMapper.toEntity(newReminderDTO.getStructureDto());
-        Reminders reminder = this.remindersMapper.toEntity(newReminderDTO.getReminderDto());
-       // StrsRems strsRems = this.strsRemsMapper.toEntity(newReminderDTO.getStrsRemsDto());
+        //non va inserita perchè devo ricevere l'id della struttura già presdente
+        //Structures structure = this.structuresMapper.toEntity(newReminderDTO.getStructureDto());
 
-        Structures savedStructure = this.structuresRepository.save(structure);
+        Reminders reminder = this.remindersMapper.toEntity(newReminderDTO.getReminderDto());
+
+        //Structures savedStructure = this.structuresRepository.save(structure);
         Reminders savedReminder = this.remindersRepository.save(reminder);
 
-        StrsRems strsRems = new StrsRems(savedStructure.getId(), savedReminder.getId(), "");
+        //id structure statico per ora ma recuperato dalle info selezionate dal form del Front-end.
+        StrsRems strsRems = new StrsRems(26, savedReminder.getId(), newReminderDTO.getStrsRemsDto().getCreator());
 
         StrsRems savedStrsRems = this.strsRemsRepository.save(strsRems);
 
-        StructureDto savedStructureDto = this.structuresMapper.toDto(savedStructure);
+        //StructureDto savedStructureDto = this.structuresMapper.toDto(savedStructure);
         ReminderDto savedReminderDto = this.remindersMapper.toDto(savedReminder);
         StrsRemsDto savedStrsRemsDto = this.strsRemsMapper.toDto(savedStrsRems);
 
         newReminderDTO.setReminderDto(savedReminderDto);
-        newReminderDTO.setStructureDto(savedStructureDto);
+        //newReminderDTO.setStructureDto(savedStructureDto);
         newReminderDTO.setStrsRemsDto(savedStrsRemsDto);
 
         return newReminderDTO;
