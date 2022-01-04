@@ -1,6 +1,6 @@
 package com.example.calendar.DTOs;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class StrsRemsDto {
 
@@ -8,7 +8,8 @@ public class StrsRemsDto {
     private int id_structure;
     private int id_reminder;
     private String creator;
-    private Date timestamp;
+    private LocalDateTime timestamp;
+    private int event_duration;
 
     public int getId() {
         return id;
@@ -42,11 +43,19 @@ public class StrsRemsDto {
         this.creator = creator;
     }
 
-    public Date getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getEvent_duration() {
+        return event_duration;
+    }
+
+    public void setEvent_duration(int eventd_duration) {
+        this.event_duration = eventd_duration;
     }
 }

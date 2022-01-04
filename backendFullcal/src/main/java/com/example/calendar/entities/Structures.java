@@ -2,12 +2,13 @@ package com.example.calendar.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
+@Table("Structures")
 public class Structures {
 
     @Column("id")
-    private @Id
-    int id;
+    private @Id int id;
     @Column("idQuestionary")
     private int idQuestionary;
     @Column("idTask")
