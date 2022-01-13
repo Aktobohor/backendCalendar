@@ -20,7 +20,7 @@ class ApplicationConfig extends AbstractJdbcConfiguration {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/db_fullcal");
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3307/db_fullcal");
         dataSource.setUsername("test");
         dataSource.setPassword("test");
 

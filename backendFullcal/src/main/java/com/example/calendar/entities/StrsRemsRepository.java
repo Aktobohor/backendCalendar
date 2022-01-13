@@ -19,9 +19,6 @@ public interface StrsRemsRepository extends CrudRepository<StrsRems, Integer> {
             "join Structures on Structures.id = StrsRems.id_structure ")
     List<StrsRems> allStrsRmsApproved();
 
-    @Query("SELECT * " +
-            "FROM  StrsRems " +
-            "join Reminders on Reminders.id = StrsRems.id_reminder and confirmed = 'N' " +
-            "join Structures on Structures.id = StrsRems.id_structure ")
+    @Query("SELECT * FROM  StrsRems WHERE approved = 'N' ")
     List<StrsRems> allStrsRmsNotApproved();
 }

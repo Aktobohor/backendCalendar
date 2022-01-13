@@ -2,10 +2,10 @@ package com.example.calendar.DTOs;
 
 public class StructureDto {
     private int id;
-    private int idQuestionary;
-    private int idTask;
-    private int idChallenges;
-    private int idRandomTask;
+    private String idQuestionary;
+    private String idTask;
+    private String idChallenges;
+    private String idRandomTask;
 
     public int getId() {
         return id;
@@ -15,35 +15,35 @@ public class StructureDto {
         this.id = id;
     }
 
-    public int getIdQuestionary() {
+    public String getIdQuestionary() {
         return idQuestionary;
     }
 
-    public void setIdQuestionary(int idQuestionary) {
+    public void setIdQuestionary(String idQuestionary) {
         this.idQuestionary = idQuestionary;
     }
 
-    public int getIdTask() {
+    public String getIdTask() {
         return idTask;
     }
 
-    public void setIdTask(int idTask) {
+    public void setIdTask(String idTask) {
         this.idTask = idTask;
     }
 
-    public int getIdChallenges() {
+    public String getIdChallenges() {
         return idChallenges;
     }
 
-    public void setIdChallenges(int idChallenges) {
+    public void setIdChallenges(String idChallenges) {
         this.idChallenges = idChallenges;
     }
 
-    public int getIdRandomTask() {
+    public String getIdRandomTask() {
         return idRandomTask;
     }
 
-    public void setIdRandomTask(int idRandomTask) {
+    public void setIdRandomTask(String idRandomTask) {
         this.idRandomTask = idRandomTask;
     }
 }

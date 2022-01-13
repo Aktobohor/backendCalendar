@@ -21,6 +21,7 @@ public class ReminderDto {
     private String r_byhour;
     private String r_byminute;
     private String r_byseconds;
+    private String r_string_rule;
 
     public int getId() {
         return id;
@@ -158,4 +159,11 @@ public class ReminderDto {
         this.r_title = r_title;
     }
 
+    public String getR_string_rule() {
+        return r_string_rule;
+    }
+
+    public void setR_string_rule(String r_string_rule) {
+        this.r_string_rule = r_string_rule;
+    }
 }

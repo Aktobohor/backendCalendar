@@ -44,10 +44,12 @@ public class Reminders {
     private String r_byminute;
     @Column("r_byseconds")
     private String r_byseconds;
+    @Column("r_string_rule")
+    private String r_string_rule;
 
     public Reminders(String r_title, String r_freq, LocalDateTime r_dt_start, int r_interval, int r_wkst, int r_count,
                      LocalDateTime r_until, String r_tzid, String r_bysetpos, String r_bymonth,
-                     String r_byyearday, String r_byweekno, String r_byweekday, String r_byhour, String r_byminute, String r_byseconds) {
+                     String r_byyearday, String r_byweekno, String r_byweekday, String r_byhour, String r_byminute, String r_byseconds, String r_string_rule) {
         this.r_title = r_title;
         this.r_freq = r_freq;
         this.r_dt_start = r_dt_start;
@@ -64,6 +66,7 @@ public class Reminders {
         this.r_byhour = r_byhour;
         this.r_byminute = r_byminute;
         this.r_byseconds = r_byseconds;
+        this.r_string_rule = r_string_rule;
     }
 
     public int getId() {
@@ -221,5 +224,33 @@ public class Reminders {
                 ", r_byminute=" + r_byminute +
                 ", r_byseconds=" + r_byseconds +
                 '}';
+    }
+
+    public String toRRule() {
+        String ruleStr = "";
+        if(r_dt_start != null) {ruleStr +="DTSTART=" + r_dt_start;}
+        ruleStr += ";RRULE:";
+        if(r_freq != null) {ruleStr += "FREQ=" + r_freq;}
+        ruleStr +=";INTERVAL=" + r_interval;
+        ruleStr +=";WKST=" + r_wkst;
+        if(r_until != null) {ruleStr +=";UNTIL=" + r_until;}
+        if(r_bysetpos != null) {ruleStr +=";BYSETPOS=" + r_bysetpos;}
+        if(r_bymonth != null) {ruleStr +=";BYMONTH=" + r_bymonth;}
+        if(r_byyearday != null) {ruleStr +=";BYYEARDAY=" + r_byyearday;}
+        if(r_byweekno != null) {ruleStr +=";BYWEEKNO=" + r_byweekno;}
+        if(r_byweekday != null) {ruleStr +=";BYMONTHDAY=" + r_byweekday;}
+        if(r_byhour != null) {ruleStr +=";BYHOUR=" + r_byhour;}
+        if(r_byminute != null) {ruleStr +=";BYMINUTE=" + r_byminute;}
+        if(r_byseconds != null) {ruleStr +=";BYSECOND=" + r_byseconds;}
+        ruleStr += ";";
+        return ruleStr;
+    }
+
+    public String getR_string_rule() {
+        return r_string_rule;
+    }
+
+    public void setR_string_rule(String r_string_rule) {
+        this.r_string_rule = r_string_rule;
     }
 }

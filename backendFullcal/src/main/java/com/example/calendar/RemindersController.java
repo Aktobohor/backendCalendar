@@ -2,11 +2,7 @@ package com.example.calendar;
 
 import com.example.calendar.DTOs.NewReminderDTO;
 import com.example.calendar.DTOs.ReminderDto;
-import com.example.calendar.DTOs.StrsRemsDto;
-import com.example.calendar.DTOs.StructureDto;
 import com.example.calendar.entities.Reminders;
-import com.example.calendar.entities.StrsRems;
-import com.example.calendar.entities.Structures;
 import com.example.calendar.services.RemindersService;
 import com.example.calendar.services.StrsRemsService;
 import com.example.calendar.services.StructuresService;
@@ -41,7 +37,8 @@ public class RemindersController {
         return all;
     }
 
-    @GetMapping("/approvedfulldata")
+    //da implementare per recuperare le info complete degli eventi ricorrenti.
+    /*@GetMapping("/approvedfulldata")
     public List<NewReminderDTO> findAllApprovedfullData() {
         List<StrsRemsDto> allSR = this.str_rmdService.findAll();
         List<ReminderDto> allRems = this.remindersService.findAll();
@@ -49,17 +46,20 @@ public class RemindersController {
 
         List<NewReminderDTO> all = this.remindersService.findAllApprovedfullData();
         for (StrsRemsDto a: allSR) {
-            StructureDto sDto = allStr.stream().f
+            StructureDto sDto = allStr.stream().findAny()
         }
-
-
-
         return all;
-    }
+    }*/
 
     @GetMapping("/notapproved")
     public List<ReminderDto> getAllNotApprovedReminders() {
         List<ReminderDto> all = this.remindersService.findAllNotApproved();
+        return all;
+    }
+
+    @GetMapping("/notapprovedNEW")
+    public List<NewReminderDTO> getAllNotApprovedStrsRmds() {
+        List<NewReminderDTO> all = this.str_rmdService.findAllNotApproved();
         return all;
     }
 
@@ -69,8 +69,8 @@ public class RemindersController {
         return reminder;
     }
 
-    @GetMapping("/delete/id")
-    public void deleteReminder(@Param("Id") final int idReminder) {
+    @GetMapping("/deleteFromId")
+    public void deleteReminder(@RequestBody final int idReminder) {
         this.remindersService.deleteReminderFromId(idReminder);
     }
 
@@ -91,5 +91,7 @@ public class RemindersController {
         System.out.println("idReminder: "+idReminder);
         this.remindersService.approveFromId(idReminder);
     }
+
+
 
 }
