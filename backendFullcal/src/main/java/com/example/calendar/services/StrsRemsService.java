@@ -2,10 +2,20 @@ package com.example.calendar.services;
 
 import com.example.calendar.DTOs.*;
 import com.example.calendar.entities.*;
+import com.google.ical.compat.jodatime.LocalDateIteratorFactory;
 import org.apache.commons.collections4.IterableUtils;
+import org.joda.time.LocalDate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,4 +88,72 @@ public class StrsRemsService {
         return completeReinders;
     }
 
+    public void approveFromId(int idStrmRems) {
+        Optional<StrsRems> strsRemsById = this.strsRemsRepository.findById(idStrmRems);
+        strsRemsById.get().setApproved("Y");
+        this.strsRemsRepository.save(strsRemsById.get());
+
+        Reminders rem = getReminderFromId(strsRemsById.get().getId_reminder());
+        Structures str = getStructureFromId(strsRemsById.get().getId_structure());
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("email", "admin@example.com");
+        header.set("password", "superPss");
+        HttpEntity<?> request = new HttpEntity<>(header);
+        int counter = 0;
+        try {
+            // Print out each date in the series.
+            for (LocalDate date : LocalDateIteratorFactory.createLocalDateIterable(rem.getR_string_rule().split("\n")[1], new org.joda.time.LocalDate(rem.getR_dt_start().getYear(), rem.getR_dt_start().getMonthValue(), rem.getR_dt_start().getDayOfMonth()), true)) {
+                counter++;
+                System.out.println(date);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date parsedDate = dateFormat.parse(date.toString() + " " + rem.getR_byhour() + ":" + rem.getR_byminute() + ":" + rem.getR_byseconds());
+                Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+                UriComponentsBuilder urlTemplate = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires")
+                        .queryParam("id", "Recurrence"+strsRemsById.get().getId()+"/"+counter)
+                        .queryParam("date", timestamp.toString())
+                        .queryParam("description", "Question")
+                        .queryParam("duration", strsRemsById.get().getEvent_duration())
+                        .queryParam("name", rem.getR_title() + counter)
+                        .queryParam("ordering", "asis1")
+                        .queryParam("questionid", str.getIdQuestionary())
+                        .queryParam("status", "stopped")
+                        .queryParam("target", "/topics/wenet")
+                        .queryParam("timeinterval", 1600);
+
+                restTemplate.exchange(urlTemplate.build().encode().toUri(), HttpMethod.POST, request, String.class);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("ParsingError creazione RRULE: " + e.getMessage());
+        }
+    }
+
+    public Reminders getReminderFromId(int idReminder) {
+        Optional<Reminders> checkreminder = this.remindersRepository.findById(idReminder);
+        Reminders reminder;
+        reminder = checkreminder.orElse(null);
+        System.out.println("Reminder:" + remindersMapper.toString());
+        return reminder;
+    }
+
+    public Structures getStructureFromId(int idStrutures) {
+        Optional<Structures> checkStructure = this.structuresRepository.findById(idStrutures);
+        Structures structure;
+        structure = checkStructure.orElse(null);
+        System.out.println("Reminder:" + structuresMapper.toString());
+        return structure;
+    }
+
+    public StrsRems getStrsRemsFromId(int srID) {
+        Optional<StrsRems> checkStrmRems = this.strsRemsRepository.findById(srID);
+        StrsRems sr;
+        sr = checkStrmRems.orElse(null);
+        System.out.println("Reminder:" + structuresMapper.toString());
+        return sr;
+    }
 }

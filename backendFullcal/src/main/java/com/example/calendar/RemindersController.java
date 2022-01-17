@@ -2,12 +2,11 @@ package com.example.calendar;
 
 import com.example.calendar.DTOs.NewReminderDTO;
 import com.example.calendar.DTOs.ReminderDto;
-import com.example.calendar.entities.Reminders;
+import com.example.calendar.entities.StrsRems;
 import com.example.calendar.services.RemindersService;
 import com.example.calendar.services.StrsRemsService;
 import com.example.calendar.services.StructuresService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,20 +36,6 @@ public class RemindersController {
         return all;
     }
 
-    //da implementare per recuperare le info complete degli eventi ricorrenti.
-    /*@GetMapping("/approvedfulldata")
-    public List<NewReminderDTO> findAllApprovedfullData() {
-        List<StrsRemsDto> allSR = this.str_rmdService.findAll();
-        List<ReminderDto> allRems = this.remindersService.findAll();
-        List<StructureDto> allStr = this.structuresService.findAll();
-
-        List<NewReminderDTO> all = this.remindersService.findAllApprovedfullData();
-        for (StrsRemsDto a: allSR) {
-            StructureDto sDto = allStr.stream().findAny()
-        }
-        return all;
-    }*/
-
     @GetMapping("/notapproved")
     public List<ReminderDto> getAllNotApprovedReminders() {
         List<ReminderDto> all = this.remindersService.findAllNotApproved();
@@ -63,16 +48,16 @@ public class RemindersController {
         return all;
     }
 
-    @GetMapping("/getid")
+    /*@GetMapping("/getid")
     public Reminders getRemindersfromId(@Param("Id") final int idReminder) {
         Reminders reminder = this.remindersService.getReminderFromId(idReminder);
         return reminder;
-    }
+    }*/
 
-    @GetMapping("/deleteFromId")
+    /*@GetMapping("/deleteFromId")
     public void deleteReminder(@RequestBody final int idReminder) {
         this.remindersService.deleteReminderFromId(idReminder);
-    }
+    }*/
 
     @GetMapping("/deleteall")
     public void deleteReminder() {
@@ -87,11 +72,16 @@ public class RemindersController {
     }
 
     @PostMapping("/confirmFromId")
-    public void approveFromId(@RequestBody final int idReminder) {
-        System.out.println("idReminder: "+idReminder);
-        this.remindersService.approveFromId(idReminder);
+    public void approveFromId(@RequestBody final int idStrmRems) {
+        System.out.println("idReminder: "+idStrmRems);
+        //this.remindersService.approveFromId(idReminder);
+        this.str_rmdService.approveFromId(idStrmRems);
     }
 
-
+    @GetMapping("/colorazione")
+    public String getRemindersfromId(@RequestParam(value = "strmRemId", required = true) final int srID) {
+        StrsRems sr = this.str_rmdService.getStrsRemsFromId(srID);
+        return sr.getEvent_color();
+    }
 
 }

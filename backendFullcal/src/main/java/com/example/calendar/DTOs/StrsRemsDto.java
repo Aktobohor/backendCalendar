@@ -10,6 +10,7 @@ public class StrsRemsDto {
     private String creator;
     private LocalDateTime timestamp;
     private int event_duration;
+    private String event_color;
 
     public int getId() {
         return id;
@@ -57,5 +58,13 @@ public class StrsRemsDto {
 
     public void setEvent_duration(int eventd_duration) {
         this.event_duration = eventd_duration;
+    }
+
+    public String getEvent_color() {
+        return event_color;
+    }
+
+    public void setEvent_color(String event_color) {
+        this.event_color = event_color;
     }
 }

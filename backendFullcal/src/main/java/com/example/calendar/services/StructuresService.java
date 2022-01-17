@@ -29,9 +29,6 @@ public class StructuresService {
         List<Structures> results = IterableUtils.toList(all);
         System.out.println("aaaaaal:" + all);
 
-        //ritorna una sola structures
-        //return  structurMapper.toDto(structures);
-
         return results.stream().map(result -> structuresMapper.toDto(result)).collect(Collectors.toList());
     }
 

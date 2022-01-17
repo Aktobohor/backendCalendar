@@ -24,14 +24,18 @@ public class StrsRems {
     private LocalDateTime timestamp;
     @Column("event_duration")
     private int event_duration;
+    @Column("event_color")
+    private String event_color;
 
-    public StrsRems(int id_structure, int id_reminder, String creator, String approved, int event_duration) {
+    public StrsRems(int id_structure, int id_reminder, String creator, String approved, int event_duration, String event_color) {
         this.id_structure = id_structure;
         this.id_reminder = id_reminder;
         this.creator = creator;
         this.approved = approved;
         this.event_duration = event_duration;
+        this.event_color = event_color;
         this.timestamp = java.time.LocalDateTime.now();//new Date(Calendar.getInstance().getTime().getTime());
+        this.event_color = event_color;
     }
 
     public int getId() {
@@ -83,6 +87,7 @@ public class StrsRems {
                 ", creator=" + creator +
                 ", timestamp=" + timestamp +
                 ", event_duration=" + event_duration +
+                ", event_color=" + event_color +
                 '}';
     }
 
@@ -100,5 +105,13 @@ public class StrsRems {
 
     public void setEvent_duration(int event_duration) {
         this.event_duration = event_duration;
+    }
+
+    public String getEvent_color() {
+        return event_color;
+    }
+
+    public void setEvent_color(String event_color) {
+        this.event_color = event_color;
     }
 }
