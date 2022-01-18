@@ -78,6 +78,11 @@ public class RemindersController {
         this.str_rmdService.approveFromId(idStrmRems);
     }
 
+    @PostMapping("/deleteQuestionarieFromid")
+    public void approveFromId(@RequestBody final String questionareID) {
+        this.str_rmdService.deleteQuestionarieFromid(questionareID);
+    }
+
     @GetMapping("/colorazione")
     public String getRemindersfromId(@RequestParam(value = "strmRemId", required = true) final int srID) {
         StrsRems sr = this.str_rmdService.getStrsRemsFromId(srID);

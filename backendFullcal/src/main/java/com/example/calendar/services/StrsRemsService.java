@@ -43,6 +43,13 @@ public class StrsRemsService {
         this.strsRemsMapper = strsRemsMapper;
     }
 
+    private HttpHeaders getHttpHeaders(){
+        HttpHeaders header = new HttpHeaders();
+        header.set("email", "admin@example.com");
+        header.set("password", "superPss");
+        return header;
+    }
+
     public List<StrsRemsDto> findAll() {
         Iterable<StrsRems> all = this.strsRemsRepository.findAll();
         List<StrsRems> results = IterableUtils.toList(all);
@@ -88,6 +95,11 @@ public class StrsRemsService {
         return completeReinders;
     }
 
+    /**
+     * metodo che approva la ricorrenza inserita e carica su Ilog le ricorrenze che saranno schadulate
+     * in attesa di essere inviate agli utenti
+     * @param idStrmRems id della tabella join tra structures e reminder
+     */
     public void approveFromId(int idStrmRems) {
         Optional<StrsRems> strsRemsById = this.strsRemsRepository.findById(idStrmRems);
         strsRemsById.get().setApproved("Y");
@@ -97,13 +109,11 @@ public class StrsRemsService {
         Structures str = getStructureFromId(strsRemsById.get().getId_structure());
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders header = new HttpHeaders();
-        header.set("email", "admin@example.com");
-        header.set("password", "superPss");
-        HttpEntity<?> request = new HttpEntity<>(header);
+        HttpEntity<?> request = new HttpEntity<>(getHttpHeaders());
         int counter = 0;
+        List<String>QuestionariesIDs = new ArrayList<>();
         try {
-            // Print out each date in the series.
+            //in base alla RRule estraggo una lista di date per inserire le questionaries sul Back-end ILOG.
             for (LocalDate date : LocalDateIteratorFactory.createLocalDateIterable(rem.getR_string_rule().split("\n")[1], new org.joda.time.LocalDate(rem.getR_dt_start().getYear(), rem.getR_dt_start().getMonthValue(), rem.getR_dt_start().getDayOfMonth()), true)) {
                 counter++;
                 System.out.println(date);
@@ -118,7 +128,7 @@ public class StrsRemsService {
                         .queryParam("date", timestamp.toString())
                         .queryParam("description", "Question")
                         .queryParam("duration", strsRemsById.get().getEvent_duration())
-                        .queryParam("name", rem.getR_title() + counter)
+                        .queryParam("name", rem.getR_title())
                         .queryParam("ordering", "asis1")
                         .queryParam("questionid", str.getIdQuestionary())
                         .queryParam("status", "stopped")
@@ -126,20 +136,15 @@ public class StrsRemsService {
                         .queryParam("timeinterval", 1600);
 
                 restTemplate.exchange(insert.build().encode().toUri(), HttpMethod.POST, request, String.class);
+                QuestionariesIDs.add(ID);
             }
 
+            //Ricarico la lista dei job in seguito all'inserimento delle nuove questionaries su ILOG
             UriComponentsBuilder reload = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/reload/");
             restTemplate.exchange(reload.build().encode().toUri(), HttpMethod.GET, request, String.class);
 
-
-            counter = 0;
-            //TODO: USARE LA LISTA INVECE CHE UN FOR SULLE DATE :) 
-            for (LocalDate date : LocalDateIteratorFactory.createLocalDateIterable(rem.getR_string_rule().split("\n")[1], new org.joda.time.LocalDate(rem.getR_dt_start().getYear(), rem.getR_dt_start().getMonthValue(), rem.getR_dt_start().getDayOfMonth()), true)) {
-                counter++;
-                System.out.println(date);
-
-                String ID = "Recurrence" + strsRemsById.get().getId() + "|" + counter;
-
+            //Avvio le questionaries inserite sopra ciclando la lista di ID compilata nell'inserimento delle questionaries su ILOG
+            for (String ID : QuestionariesIDs) {
 
                 UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + ID);
 
@@ -150,6 +155,25 @@ public class StrsRemsService {
         } catch (Exception e) {
             System.out.println("ParsingError creazione RRULE: " + e.getMessage());
         }
+    }
+
+    public void deleteQuestionarieFromid(String ID){
+
+        //1)stoppo il questionaries che è già schedulato
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<?> request = new HttpEntity<>(getHttpHeaders());
+        UriComponentsBuilder stopQID = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/stop/" + ID);
+
+        restTemplate.exchange(stopQID.build().encode().toUri(), HttpMethod.GET, request, String.class);
+
+        //2)elimino il questionaries che è stato stoppato
+        restTemplate = new RestTemplate();
+        request = new HttpEntity<>(getHttpHeaders());
+
+        UriComponentsBuilder deleteQID = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/" + ID);
+
+        restTemplate.exchange(deleteQID.build().encode().toUri(), HttpMethod.DELETE, request, String.class);
+
     }
 
     public Reminders getReminderFromId(int idReminder) {
