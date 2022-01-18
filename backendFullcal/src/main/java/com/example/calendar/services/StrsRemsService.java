@@ -111,9 +111,10 @@ public class StrsRemsService {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date parsedDate = dateFormat.parse(date.toString() + " " + rem.getR_byhour() + ":" + rem.getR_byminute() + ":" + rem.getR_byseconds());
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+                String ID = "Recurrence" + strsRemsById.get().getId() + "|" + counter;
 
-                UriComponentsBuilder urlTemplate = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires")
-                        .queryParam("id", "Recurrence"+strsRemsById.get().getId()+"/"+counter)
+                UriComponentsBuilder insert = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires")
+                        .queryParam("id", ID)
                         .queryParam("date", timestamp.toString())
                         .queryParam("description", "Question")
                         .queryParam("duration", strsRemsById.get().getEvent_duration())
@@ -124,7 +125,25 @@ public class StrsRemsService {
                         .queryParam("target", "/topics/wenet")
                         .queryParam("timeinterval", 1600);
 
-                restTemplate.exchange(urlTemplate.build().encode().toUri(), HttpMethod.POST, request, String.class);
+                restTemplate.exchange(insert.build().encode().toUri(), HttpMethod.POST, request, String.class);
+            }
+
+            UriComponentsBuilder reload = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/reload/");
+            restTemplate.exchange(reload.build().encode().toUri(), HttpMethod.GET, request, String.class);
+
+
+            counter = 0;
+            //TODO: USARE LA LISTA INVECE CHE UN FOR SULLE DATE :) 
+            for (LocalDate date : LocalDateIteratorFactory.createLocalDateIterable(rem.getR_string_rule().split("\n")[1], new org.joda.time.LocalDate(rem.getR_dt_start().getYear(), rem.getR_dt_start().getMonthValue(), rem.getR_dt_start().getDayOfMonth()), true)) {
+                counter++;
+                System.out.println(date);
+
+                String ID = "Recurrence" + strsRemsById.get().getId() + "|" + counter;
+
+
+                UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + ID);
+
+                restTemplate.exchange(start.build().encode().toUri(), HttpMethod.GET, request, String.class);
 
             }
 
