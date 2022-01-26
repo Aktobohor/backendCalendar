@@ -1,6 +1,7 @@
 package com.example.calendar;
 
-import com.example.calendar.DTOs.NewReminderDTO;
+import com.example.calendar.DTOs.NewReminderDto;
+import com.example.calendar.DTOs.QuestionaryDto;
 import com.example.calendar.DTOs.ReminderDto;
 import com.example.calendar.entities.StrsRems;
 import com.example.calendar.services.RemindersService;
@@ -43,8 +44,8 @@ public class RemindersController {
     }
 
     @GetMapping("/notapprovedNEW")
-    public List<NewReminderDTO> getAllNotApprovedStrsRmds() {
-        List<NewReminderDTO> all = this.str_rmdService.findAllNotApproved();
+    public List<NewReminderDto> getAllNotApprovedStrsRmds() {
+        List<NewReminderDto> all = this.str_rmdService.findAllNotApproved();
         return all;
     }
 
@@ -65,7 +66,7 @@ public class RemindersController {
     }
 
     @PostMapping("/create")
-    public NewReminderDTO createReminder(@RequestBody final NewReminderDTO newReminder) {
+    public NewReminderDto createReminder(@RequestBody final NewReminderDto newReminder) {
         System.out.println("body: " + newReminder.getReminderDto());
 
         return this.remindersService.save(newReminder);
@@ -79,14 +80,19 @@ public class RemindersController {
     }
 
     @PostMapping("/deleteQuestionarieFromid")
-    public void approveFromId(@RequestBody final String questionareID) {
+    public void deleteQuestionarieFromid(@RequestBody final String questionareID) {
         this.str_rmdService.deleteQuestionarieFromid(questionareID);
     }
 
     @GetMapping("/colorazione")
-    public String getRemindersfromId(@RequestParam(value = "strmRemId", required = true) final int srID) {
+    public String getColor(@RequestParam(value = "strmRemId", required = true) final int srID) {
         StrsRems sr = this.str_rmdService.getStrsRemsFromId(srID);
         return sr.getEvent_color();
     }
 
+    @PostMapping("/modificaQuestionarie")
+    public void modificaQuestionarie(@RequestBody final QuestionaryDto questionarieModified) {
+        System.out.println("body: " + questionarieModified);
+        this.str_rmdService.updateQuestionaries(questionarieModified);
+    }
 }

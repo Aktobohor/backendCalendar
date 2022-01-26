@@ -1,6 +1,6 @@
 package com.example.calendar.utils;
 
-import com.example.calendar.DTOs.NewReminderDTO;
+import com.example.calendar.DTOs.NewReminderDto;
 import com.example.calendar.DTOs.ReminderDto;
 import com.google.ical.compat.jodatime.LocalDateIterable;
 import com.google.ical.compat.jodatime.LocalDateIteratorFactory;
@@ -33,7 +33,7 @@ public class DateGenerator {
         }
     }
 
-    public LocalDateIterable dateListFromNewRRuleInReminderDTO(NewReminderDTO newReminder){
+    public LocalDateIterable dateListFromNewRRuleInReminderDTO(NewReminderDto newReminder){
 
         ReminderDto r = newReminder.getReminderDto();
 

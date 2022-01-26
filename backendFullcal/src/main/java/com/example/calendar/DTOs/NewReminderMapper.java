@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface NewReminderMapper {
 
-    NewReminderDTO toDto(NewReminder newReminders);
+    NewReminderDto toDto(NewReminder newReminders);
 
-    NewReminder toEntity(NewReminderDTO reminder);
+    NewReminder toEntity(NewReminderDto reminder);
 }

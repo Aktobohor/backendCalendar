@@ -68,7 +68,7 @@ public class StrsRemsService {
 
     //recupero tutte le info degli eventi ricorrenti avendo una lista
     // con le info delle 3 tabelle contenute negli appositi oggetti
-    public List<NewReminderDTO> findAllNotApproved() {
+    public List<NewReminderDto> findAllNotApproved() {
         // ARGOMENTO decide cosa recuperare
         return CreateNewReminderDtoList(this.strsRemsRepository.allStrsRmsNotApproved());
     }
@@ -78,13 +78,13 @@ public class StrsRemsService {
      * @param allNotApproved Dati che interessano e devono essere messi nella struttura NewReminderDTO
      * @return List<NewReminderDTO> dati che sono utlizzabili dal front-end
      */
-    List<NewReminderDTO> CreateNewReminderDtoList(List<StrsRems> allNotApproved){
-        List<NewReminderDTO> completeReinders = new ArrayList<>();
+    List<NewReminderDto> CreateNewReminderDtoList(List<StrsRems> allNotApproved){
+        List<NewReminderDto> completeReinders = new ArrayList<>();
         for (StrsRems strm :allNotApproved) {
             Optional<Reminders> rem = this.remindersRepository.findById(strm.getId_reminder());
             Optional<Structures> st = this.structuresRepository.findById(strm.getId_structure());
             if(rem.isPresent() && st.isPresent()) {
-                NewReminderDTO nr = new NewReminderDTO();
+                NewReminderDto nr = new NewReminderDto();
                 nr.setReminderDto(this.remindersMapper.toDto(rem.get()));
                 nr.setStructureDto(this.structuresMapper.toDto(st.get()));
                 nr.setStrsRemsDto(this.strsRemsMapper.toDto(strm));
@@ -134,7 +134,6 @@ public class StrsRemsService {
                         .queryParam("status", "stopped")
                         .queryParam("target", "/topics/wenet")
                         .queryParam("timeinterval", 1600);
-
                 restTemplate.exchange(insert.build().encode().toUri(), HttpMethod.POST, request, String.class);
                 QuestionariesIDs.add(ID);
             }
@@ -145,11 +144,8 @@ public class StrsRemsService {
 
             //Avvio le questionaries inserite sopra ciclando la lista di ID compilata nell'inserimento delle questionaries su ILOG
             for (String ID : QuestionariesIDs) {
-
                 UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + ID);
-
                 restTemplate.exchange(start.build().encode().toUri(), HttpMethod.GET, request, String.class);
-
             }
 
         } catch (Exception e) {
@@ -163,15 +159,12 @@ public class StrsRemsService {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> request = new HttpEntity<>(getHttpHeaders());
         UriComponentsBuilder stopQID = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/stop/" + ID);
-
         restTemplate.exchange(stopQID.build().encode().toUri(), HttpMethod.GET, request, String.class);
 
         //2)elimino il questionaries che è stato stoppato
         restTemplate = new RestTemplate();
         request = new HttpEntity<>(getHttpHeaders());
-
         UriComponentsBuilder deleteQID = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/" + ID);
-
         restTemplate.exchange(deleteQID.build().encode().toUri(), HttpMethod.DELETE, request, String.class);
 
     }
@@ -198,5 +191,42 @@ public class StrsRemsService {
         sr = checkStrmRems.orElse(null);
         System.out.println("Reminder:" + structuresMapper.toString());
         return sr;
+    }
+
+    public void updateQuestionaries( QuestionaryDto questionaryModified) {
+        //1)stoppo il questionaries che è già schedulato
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<?> request = new HttpEntity<>(getHttpHeaders());
+        UriComponentsBuilder stopQID = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/stop/" + questionaryModified.getId());
+        restTemplate.exchange(stopQID.build().encode().toUri(), HttpMethod.GET, request, String.class);
+
+        //format della data
+        Timestamp timestamp = new java.sql.Timestamp(questionaryModified.getDate().getTime());
+
+        //2)Aggiorno il questionaries che è stato stoppato
+        restTemplate = new RestTemplate();
+        request = new HttpEntity<>(getHttpHeaders());
+        UriComponentsBuilder deleteQID = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/")
+                .queryParam("id", questionaryModified.getId())
+                .queryParam("date", timestamp.toString())
+                .queryParam("description", questionaryModified.getDescription())
+                .queryParam("duration", questionaryModified.getDuration())
+                .queryParam("name", questionaryModified.getName())
+                .queryParam("ordering", questionaryModified.getOrdering())
+                .queryParam("questionid", questionaryModified.getQuestionid())
+                .queryParam("status", questionaryModified.getStatus())
+                .queryParam("target", questionaryModified.getTarget())
+                .queryParam("timeinterval", questionaryModified.getTimeinterval());
+
+        restTemplate.exchange(deleteQID.build().encode().toUri(), HttpMethod.PUT, request, String.class);
+
+        //Ricarico la lista dei job in seguito all'inserimento delle nuove questionaries su ILOG
+        UriComponentsBuilder reload = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/reload/");
+        restTemplate.exchange(reload.build().encode().toUri(), HttpMethod.GET, request, String.class);
+
+        //Avvio la questionaries aggiornata sopra
+        UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + questionaryModified.getId());
+        restTemplate.exchange(start.build().encode().toUri(), HttpMethod.GET, request, String.class);
+
     }
 }

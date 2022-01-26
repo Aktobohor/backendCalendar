@@ -1,6 +1,6 @@
 package com.example.calendar.DTOs;
 
-public class NewReminderDTO {
+public class NewReminderDto {
     ReminderDto reminderDto;
     StructureDto structureDto;
     StrsRemsDto strsRemsDto;

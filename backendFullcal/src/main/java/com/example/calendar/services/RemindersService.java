@@ -40,7 +40,7 @@ public class RemindersService {
         return results.stream().map(result -> remindersMapper.toDto(result)).collect(Collectors.toList());
     }
 
-    public List<NewReminderDTO> findAllApprovedfullData() {
+    public List<NewReminderDto> findAllApprovedfullData() {
         List<NewReminder> allApproved = this.newRemindersRepository.findAllApprovedfullData();
         return allApproved.stream().map(result -> newRemindersMapper.toDto(result)).collect(Collectors.toList());
     }
@@ -65,12 +65,30 @@ public class RemindersService {
         this.remindersRepository.deleteById(idStrutures);
     }
 
-    public NewReminderDTO save(NewReminderDTO newReminderDTO) {
+    public NewReminderDto save(NewReminderDto newReminderDTO) {
 
         Structures structure = this.structuresMapper.toEntity(newReminderDTO.getStructureDto());
         Reminders reminder = this.remindersMapper.toEntity(newReminderDTO.getReminderDto());
 
-        Structures savedStructure = this.structuresRepository.save(structure);
+        //Se la structures è gia presente recupero l'id di quella struttura.
+        Structures savedStructure = null;
+        if(structure.getIdQuestionary() != null){
+            savedStructure = this.structuresRepository.findFromQuestionId(structure.getIdQuestionary());
+        }
+        /*if(structure.getIdChallenges() != null){ //RICERCA STRUCTURES IN BASE ALLA DOMANDA SELEZIONATA.
+            this.structuresRepository.findFromChallengeId(structure.getIdChallenges());
+        }
+        if(structure.getIdRandomTask() != null){
+            this.structuresRepository.findFromRandomTaskId(structure.getIdRandomTask());
+        }
+        if(structure.getIdTask() != null){
+            this.structuresRepository.findFromTaskId(structure.getIdTask());
+        }*/
+        //solo se non è stata trovata la structures allora la inserisco.
+        if(savedStructure == null) {
+            savedStructure = this.structuresRepository.save(structure);
+        }
+        //inserisco la RRule nel database per ricreare le ricorrenze.
         Reminders savedReminder = this.remindersRepository.save(reminder);
 
         //id structure statico per ora ma recuperato dalle info selezionate dal form del Front-end.
@@ -90,19 +108,19 @@ public class RemindersService {
     }
 
 
-    public List<NewReminderDTO> getAllDataNotApproved(){
+    public List<NewReminderDto> getAllDataNotApproved(){
         //prendere i dati delle 3 tabelle e restituirli.
         return null;
     }
 
-    public List<NewReminderDTO> getAllDataFromIDs(){
+    public List<NewReminderDto> getAllDataFromIDs(){
         //prendere i dati delle 3 tabelle e restituirli.
         return null;
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public List<NewReminderDTO> getAllDataApproved(){
+    public List<NewReminderDto> getAllDataApproved(){
         //prendere i dati delle 3 tabelle e restituirli.
         List<StrsRemsDto> allStrsRmsApprovedDto = this.findAllStrsRemsApproved();
         List<ReminderDto> allRemindersApprovedDto = this.findRemindersFromForeignKeys(allStrsRmsApprovedDto);
