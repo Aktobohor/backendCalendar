@@ -117,7 +117,6 @@ public class StrsRemsService {
             for (LocalDate date : LocalDateIteratorFactory.createLocalDateIterable(rem.getR_string_rule().split("\n")[1], new org.joda.time.LocalDate(rem.getR_dt_start().getYear(), rem.getR_dt_start().getMonthValue(), rem.getR_dt_start().getDayOfMonth()), true)) {
                 counter++;
                 System.out.println(date);
-
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date parsedDate = dateFormat.parse(date.toString() + " " + rem.getR_byhour() + ":" + rem.getR_byminute() + ":" + rem.getR_byseconds());
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
@@ -136,6 +135,7 @@ public class StrsRemsService {
                         .queryParam("timeinterval", 1600);
                 restTemplate.exchange(insert.build().encode().toUri(), HttpMethod.POST, request, String.class);
                 QuestionariesIDs.add(ID);
+
             }
 
             //Ricarico la lista dei job in seguito all'inserimento delle nuove questionaries su ILOG
@@ -227,6 +227,17 @@ public class StrsRemsService {
         //Avvio la questionaries aggiornata sopra
         UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + questionaryModified.getId());
         restTemplate.exchange(start.build().encode().toUri(), HttpMethod.GET, request, String.class);
+
+    }
+
+    public void deleteReminders(int srID) {
+        Optional<StrsRems> checkStrmRems = this.strsRemsRepository.findById(srID);
+        StrsRems sr;
+        sr = checkStrmRems.orElse(null);
+        //elimino row strsRems
+        this.strsRemsRepository.deleteById(sr.getId());
+        //elimino row reminders
+        this.remindersRepository.deleteById(sr.getId_reminder());
 
     }
 }

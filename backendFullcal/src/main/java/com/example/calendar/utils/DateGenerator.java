@@ -10,6 +10,7 @@ import com.google.ical.values.RRule;
 import org.joda.time.LocalDate;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class DateGenerator {
 
@@ -62,4 +63,7 @@ public class DateGenerator {
         return dateListFromRRule;
     }
 
+    public static Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(String.valueOf(dateToConvert));
+    }
 }

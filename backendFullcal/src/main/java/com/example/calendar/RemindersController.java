@@ -55,10 +55,10 @@ public class RemindersController {
         return reminder;
     }*/
 
-    /*@GetMapping("/deleteFromId")
-    public void deleteReminder(@RequestBody final int idReminder) {
-        this.remindersService.deleteReminderFromId(idReminder);
-    }*/
+    @PostMapping("/deleteFromId")
+    public void deleteReminder(@RequestBody final int srID) {
+        this.str_rmdService.deleteReminders(srID);
+    }
 
     @GetMapping("/deleteall")
     public void deleteReminder() {
