@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -109,9 +110,12 @@ public class StrsRemsService {
         Structures str = getStructureFromId(strsRemsById.get().getId_structure());
         RestTemplate restTemplate = new RestTemplate();
 
+        List<String>QuestionariesIDs = new ArrayList<>();
+        addQuestionariesInEsecuzione(QuestionariesIDs);
+
         HttpEntity<?> request = new HttpEntity<>(getHttpHeaders());
         int counter = 0;
-        List<String>QuestionariesIDs = new ArrayList<>();
+
         try {
             //in base alla RRule estraggo una lista di date per inserire le questionaries sul Back-end ILOG.
             for (LocalDate date : LocalDateIteratorFactory.createLocalDateIterable(rem.getR_string_rule().split("\n")[1], new org.joda.time.LocalDate(rem.getR_dt_start().getYear(), rem.getR_dt_start().getMonthValue(), rem.getR_dt_start().getDayOfMonth()), true)) {
@@ -150,6 +154,36 @@ public class StrsRemsService {
 
         } catch (Exception e) {
             System.out.println("ParsingError creazione RRULE: " + e.getMessage());
+        }
+    }
+
+    private void addQuestionariesInEsecuzione(List<String> questionariesIDs) {
+        //recupero le questionaries a running e le aggiungo all'oggetto ricevuto come argomento.
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<?> request = new HttpEntity<>(getHttpHeaders());
+        UriComponentsBuilder reload = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires");
+        ResponseEntity<String> entity = restTemplate.exchange(reload.build().encode().toUri(), HttpMethod.GET, request, String.class);
+        String body = entity.getBody();
+        body = body.replace("[","");
+        body = body.replace("]","");
+        body = body.replace("{","");
+        String[] a = body.split("}");
+        String idQuestionRunning;
+        for (String b : a){
+            idQuestionRunning = "";
+            String[] tmp = b.split(",");
+            for(String j : tmp){
+                j = j.replace("\"","");
+                String[] i = j.split(":");
+                if(i[0].equals("id")){
+                    idQuestionRunning = i[1];
+                }
+                if(i[0].equals("status")){
+                    if(i[1].equals("running")){
+                        questionariesIDs.add(idQuestionRunning);
+                    }
+                }
+            }
         }
     }
 
@@ -194,11 +228,16 @@ public class StrsRemsService {
     }
 
     public void updateQuestionaries( QuestionaryDto questionaryModified) {
+
+
         //1)stoppo il questionaries che è già schedulato
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> request = new HttpEntity<>(getHttpHeaders());
         UriComponentsBuilder stopQID = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/stop/" + questionaryModified.getId());
         restTemplate.exchange(stopQID.build().encode().toUri(), HttpMethod.GET, request, String.class);
+
+        List<String>QuestionariesIDs = new ArrayList<>();
+        addQuestionariesInEsecuzione(QuestionariesIDs);
 
         //format della data
         Timestamp timestamp = new java.sql.Timestamp(questionaryModified.getDate().getTime());
@@ -217,16 +256,21 @@ public class StrsRemsService {
                 .queryParam("status", questionaryModified.getStatus())
                 .queryParam("target", questionaryModified.getTarget())
                 .queryParam("timeinterval", questionaryModified.getTimeinterval());
-
         restTemplate.exchange(deleteQID.build().encode().toUri(), HttpMethod.PUT, request, String.class);
+        QuestionariesIDs.add(questionaryModified.getId());
 
         //Ricarico la lista dei job in seguito all'inserimento delle nuove questionaries su ILOG
         UriComponentsBuilder reload = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/reload/");
         restTemplate.exchange(reload.build().encode().toUri(), HttpMethod.GET, request, String.class);
 
+        //Avvio le questionaries inserite sopra ciclando la lista di ID compilata nell'inserimento delle questionaries su ILOG
+        for (String ID : QuestionariesIDs) {
+            UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + ID);
+            restTemplate.exchange(start.build().encode().toUri(), HttpMethod.GET, request, String.class);
+        }
         //Avvio la questionaries aggiornata sopra
-        UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + questionaryModified.getId());
-        restTemplate.exchange(start.build().encode().toUri(), HttpMethod.GET, request, String.class);
+        /*UriComponentsBuilder start = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires/jobs/start/" + questionaryModified.getId());
+        restTemplate.exchange(start.build().encode().toUri(), HttpMethod.GET, request, String.class);*/
 
     }
 

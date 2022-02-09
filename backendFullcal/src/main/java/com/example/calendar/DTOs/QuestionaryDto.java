@@ -1,8 +1,9 @@
 package com.example.calendar.DTOs;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class QuestionaryDto {
+public class QuestionaryDto implements Serializable {
 
     private String id;
     private Date date;
