@@ -20,6 +20,8 @@ public class StrsRems {
     private String creator;
     @Column("approved")
     private String approved;
+    @Column("user_approvation")
+    private String user_approvation;
     @Column("timestamp")
     private LocalDateTime timestamp;
     @Column("event_duration")
@@ -27,11 +29,12 @@ public class StrsRems {
     @Column("event_color")
     private String event_color;
 
-    public StrsRems(int id_structure, int id_reminder, String creator, String approved, int event_duration, String event_color) {
+    public StrsRems(int id_structure, int id_reminder, String creator, String approved, String user_approvation, int event_duration, String event_color) {
         this.id_structure = id_structure;
         this.id_reminder = id_reminder;
         this.creator = creator;
         this.approved = approved;
+        this.user_approvation = user_approvation;
         this.event_duration = event_duration;
         this.event_color = event_color;
         this.timestamp = java.time.LocalDateTime.now();//new Date(Calendar.getInstance().getTime().getTime());
@@ -113,5 +116,13 @@ public class StrsRems {
 
     public void setEvent_color(String event_color) {
         this.event_color = event_color;
+    }
+
+    public String getUser_approvation() {
+        return user_approvation;
+    }
+
+    public void setUser_approvation(String user_approvation) {
+        this.user_approvation = user_approvation;
     }
 }

@@ -103,7 +103,7 @@ public class StrsRemsService {
      */
     public void approveFromId(int idStrmRems) {
         Optional<StrsRems> strsRemsById = this.strsRemsRepository.findById(idStrmRems);
-        strsRemsById.get().setApproved("Y");
+        strsRemsById.get().setUser_approvation("Y");
         this.strsRemsRepository.save(strsRemsById.get());
 
         Reminders rem = getReminderFromId(strsRemsById.get().getId_reminder());
@@ -135,7 +135,7 @@ public class StrsRemsService {
                         .queryParam("ordering", "asis1")
                         .queryParam("questionid", str.getIdQuestionary())
                         .queryParam("status", "stopped")
-                        .queryParam("target", "/topics/wenet")
+                        .queryParam("target", "US12345")
                         .queryParam("timeinterval", 1600);
                 restTemplate.exchange(insert.build().encode().toUri(), HttpMethod.POST, request, String.class);
                 QuestionariesIDs.add(ID);
@@ -283,5 +283,21 @@ public class StrsRemsService {
         //elimino row reminders
         this.remindersRepository.deleteById(sr.getId_reminder());
 
+    }
+
+    public void adminApproveFromId(int idStrmRems) {
+        Optional<StrsRems> strsRemsById = this.strsRemsRepository.findById(idStrmRems);
+        strsRemsById.get().setApproved("Y");
+        this.strsRemsRepository.save(strsRemsById.get());
+    }
+
+    public List<NewReminderDto> findAllNotApprovedFromUser() {
+        return CreateNewReminderDtoList(this.strsRemsRepository.allStrsRmsNotApprovedFromUser());
+    }
+
+    public void userDeleteReminders(int idStrmRems) {
+        Optional<StrsRems> strsRemsById = this.strsRemsRepository.findById(idStrmRems);
+        strsRemsById.get().setUser_approvation("D");
+        this.strsRemsRepository.save(strsRemsById.get());
     }
 }

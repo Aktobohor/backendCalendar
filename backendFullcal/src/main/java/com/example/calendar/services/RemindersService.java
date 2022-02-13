@@ -92,7 +92,7 @@ public class RemindersService {
         Reminders savedReminder = this.remindersRepository.save(reminder);
 
         //id structure statico per ora ma recuperato dalle info selezionate dal form del Front-end.
-        StrsRems strsRems = new StrsRems(savedStructure.getId(), savedReminder.getId(), newReminderDTO.getStrsRemsDto().getCreator(), "N", newReminderDTO.getStrsRemsDto().getEvent_duration(), newReminderDTO.getStrsRemsDto().getEvent_color());
+        StrsRems strsRems = new StrsRems(savedStructure.getId(), savedReminder.getId(), newReminderDTO.getStrsRemsDto().getCreator(), "N", "N", newReminderDTO.getStrsRemsDto().getEvent_duration(), newReminderDTO.getStrsRemsDto().getEvent_color());
 
         StrsRems savedStrsRems = this.strsRemsRepository.save(strsRems);
 

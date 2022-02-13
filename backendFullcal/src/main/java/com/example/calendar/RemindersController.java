@@ -49,6 +49,12 @@ public class RemindersController {
         return all;
     }
 
+    @GetMapping("/notapprovedfromuserNEW")
+    public List<NewReminderDto> getAllNotApprovedFromUserStrsRmds() {
+        List<NewReminderDto> all = this.str_rmdService.findAllNotApprovedFromUser();
+        return all;
+    }
+
     /*@GetMapping("/getid")
     public Reminders getRemindersfromId(@Param("Id") final int idReminder) {
         Reminders reminder = this.remindersService.getReminderFromId(idReminder);
@@ -58,6 +64,11 @@ public class RemindersController {
     @PostMapping("/deleteFromId")
     public void deleteReminder(@RequestBody final int srID) {
         this.str_rmdService.deleteReminders(srID);
+    }
+
+    @PostMapping("/userDeleteFromId")
+    public void userDeleteReminder(@RequestBody final int srID) {
+        this.str_rmdService.userDeleteReminders(srID);
     }
 
     @GetMapping("/deleteall")
@@ -73,10 +84,18 @@ public class RemindersController {
     }
 
     @PostMapping("/confirmFromId")
-    public void approveFromId(@RequestBody final int idStrmRems) {
+    public void approveFromId(@RequestBody final int idStrmRems, @RequestParam final String user) {
         System.out.println("idReminder: "+idStrmRems);
+        System.out.println("user: "+user);
         //this.remindersService.approveFromId(idReminder);
         this.str_rmdService.approveFromId(idStrmRems);
+    }
+
+    @PostMapping("/adminConfirmFromId")
+    public void adminApproveFromId(@RequestBody final int idStrmRems) {
+        System.out.println("idReminder: "+idStrmRems);
+        //this.remindersService.approveFromId(idReminder);
+        this.str_rmdService.adminApproveFromId(idStrmRems);
     }
 
     @PostMapping("/deleteQuestionarieFromid")
