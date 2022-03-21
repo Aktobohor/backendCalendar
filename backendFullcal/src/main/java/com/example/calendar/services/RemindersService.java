@@ -75,24 +75,16 @@ public class RemindersService {
         if(structure.getIdQuestionary() != null){
             savedStructure = this.structuresRepository.findFromQuestionId(structure.getIdQuestionary());
         }
-        /*if(structure.getIdChallenges() != null){ //RICERCA STRUCTURES IN BASE ALLA DOMANDA SELEZIONATA.
-            this.structuresRepository.findFromChallengeId(structure.getIdChallenges());
-        }
-        if(structure.getIdRandomTask() != null){
-            this.structuresRepository.findFromRandomTaskId(structure.getIdRandomTask());
-        }
-        if(structure.getIdTask() != null){
-            this.structuresRepository.findFromTaskId(structure.getIdTask());
-        }*/
-        //solo se non è stata trovata la structures allora la inserisco.
         if(savedStructure == null) {
             savedStructure = this.structuresRepository.save(structure);
         }
-        //inserisco la RRule nel database per ricreare le ricorrenze.
+        //inserisco la RRule nel database per creare le ricorrenze.
         Reminders savedReminder = this.remindersRepository.save(reminder);
 
-        //id structure statico per ora ma recuperato dalle info selezionate dal form del Front-end.
-        StrsRems strsRems = new StrsRems(savedStructure.getId(), savedReminder.getId(), newReminderDTO.getStrsRemsDto().getCreator(), "N", "N", newReminderDTO.getStrsRemsDto().getEvent_duration(), newReminderDTO.getStrsRemsDto().getEvent_color());
+        StrsRems strsRems = new StrsRems(savedStructure.getId(), savedReminder.getId(),
+                newReminderDTO.getStrsRemsDto().getCreator(), "N", "N",
+                newReminderDTO.getStrsRemsDto().getEvent_duration(),
+                newReminderDTO.getStrsRemsDto().getEvent_color());
 
         StrsRems savedStrsRems = this.strsRemsRepository.save(strsRems);
 

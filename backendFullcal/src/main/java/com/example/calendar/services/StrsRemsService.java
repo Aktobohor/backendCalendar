@@ -101,7 +101,7 @@ public class StrsRemsService {
      * in attesa di essere inviate agli utenti
      * @param idStrmRems id della tabella join tra structures e reminder
      */
-    public void approveFromId(int idStrmRems) {
+    public void approveFromId(int idStrmRems, String user) {
         Optional<StrsRems> strsRemsById = this.strsRemsRepository.findById(idStrmRems);
         strsRemsById.get().setUser_approvation("Y");
         this.strsRemsRepository.save(strsRemsById.get());
@@ -124,7 +124,7 @@ public class StrsRemsService {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date parsedDate = dateFormat.parse(date.toString() + " " + rem.getR_byhour() + ":" + rem.getR_byminute() + ":" + rem.getR_byseconds());
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-                String ID = "Recurrence" + strsRemsById.get().getId() + "|" + counter;
+                String ID = "Recurrence" + strsRemsById.get().getId() + "|"+user+ "|" + counter;
 
                 UriComponentsBuilder insert = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/questionnaires")
                         .queryParam("id", ID)
@@ -135,7 +135,7 @@ public class StrsRemsService {
                         .queryParam("ordering", "asis1")
                         .queryParam("questionid", str.getIdQuestionary())
                         .queryParam("status", "stopped")
-                        .queryParam("target", "US12345")
+                        .queryParam("target", user)
                         .queryParam("timeinterval", 1600);
                 restTemplate.exchange(insert.build().encode().toUri(), HttpMethod.POST, request, String.class);
                 QuestionariesIDs.add(ID);

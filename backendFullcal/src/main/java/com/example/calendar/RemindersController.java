@@ -84,11 +84,10 @@ public class RemindersController {
     }
 
     @PostMapping("/confirmFromId")
-    public void approveFromId(@RequestBody final int idStrmRems, @RequestParam final String user) {
+    public void approveFromId(@RequestBody final int idStrmRems) {
         System.out.println("idReminder: "+idStrmRems);
-        System.out.println("user: "+user);
         //this.remindersService.approveFromId(idReminder);
-        this.str_rmdService.approveFromId(idStrmRems);
+        this.str_rmdService.approveFromId(idStrmRems, "US12345");
     }
 
     @PostMapping("/adminConfirmFromId")
